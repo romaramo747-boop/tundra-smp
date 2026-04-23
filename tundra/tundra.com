@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Tundra SMP — Холодная война | PvP 1.21</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0f1a;
+            font-family: 'Inter', sans-serif;
+            color: #eef5ff;
+            line-height: 1.5;
+        }
+
+        /* Суровый фон с намёком на битву */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(60, 30, 45, 0.5), transparent 60%),
+                        radial-gradient(circle at 80% 70%, rgba(20, 50, 70, 0.6), transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Хедер */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            border-bottom: 1px solid rgba(200, 70, 90, 0.4);
+            padding-bottom: 1.5rem;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffbc6e, #e63946);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            color: #bc8a6a;
+            letter-spacing: 1px;
+        }
+
+        .ip-block {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            border: 1px solid #e6394666;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .ip-block span {
+            color: #ff8c6e;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        /* Hero секция - новый текст */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffffff, #ffaa77, #ff4d4d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #ffcfb0;
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #2a1a22;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            border-left: 3px solid #e63946;
+        }
+
+        /* Донат секция */
+        .donate-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: #bc8e74;
+            margin-bottom: 3rem;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        /* Общий стиль карт */
+        .donate-card {
+            background: linear-gradient(145deg, #121a24, #0e1118);
+            border-radius: 32px;
+            padding: 2rem 1.8rem;
+            width: 320px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            box-shadow: 0 20px 35px -15px rgba(0, 0, 0, 0.6);
+            position: relative;
+            backdrop-filter: blur(4px);
+        }
+
+        .donate-card:hover {
+            transform: translateY(-8px);
+            border-color: #e63946;
+            box-shadow: 0 25px 40px -12px #e6394630;
+        }
+
+        /* VIP стиль */
+        .vip-style .card-title {
+            background: linear-gradient(135deg, #FFD966, #f2c94c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .titan-style .card-title {
+            background: linear-gradient(135deg, #8B9DC3, #5A7B9E);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .prince-style .card-title {
+            background: linear-gradient(135deg, #C38D9E, #9E5A6E);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 1rem 0 0.5rem;
+        }
+
+        .price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #bd9a84;
+        }
+
+        .rub-symbol {
+            font-size: 1.4rem;
+        }
+
+        .divider {
+            height: 2px;
+            background: rgba(230, 57, 70, 0.4);
+            margin: 1.2rem 0;
+        }
+
+        .perks {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .perks li {
+            margin: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        /* Разные иконки для разных рангов */
+        .vip-style .perks li::before { content: "⚔️"; }
+        .titan-style .perks li::before { content: "🛡️"; }
+        .prince-style .perks li::before { content: "👑"; }
+
+        .btn-donate {
+            display: block;
+            width: 100%;
+            background: linear-gradient(95deg, #2a1b1f, #1f1115);
+            border: 1px solid #e63946;
+            color: #ffdbcb;
+            text-align: center;
+            padding: 0.9rem 0;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: 0.2s;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-donate:hover {
+            background: #4a2a30;
+            border-color: #ff7e5e;
+            color: white;
+            box-shadow: 0 0 12px #e6394680;
+        }
+
+        .footer {
+            margin-top: 5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #634e42;
+            border-top: 1px solid #241a18;
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 700px) {
+            .hero h2 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .cards {
+                gap: 1.5rem;
+            }
+            .donate-card {
+                width: 100%;
+                max-width: 340px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="aurora"></div>
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <h1>TUNDRA SMP</h1>
+            <p>🧊 H A R D  ·  P V P  ·  B A T T L E 🧊</p>
+        </div>
+        <div class="ip-block">
+            🗡️ IP: <span>TundraSMP.goida.host</span>  |  версия <strong>1.21.11</strong>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h2>TUNDRA SMP<br>ЭТО НЕ ПРОСТО ВЫЖИВАНИЕ —<br>ТЫ ДОЛЖЕН УБИТЬ ПРОТИВНИКА!</h2>
+        <p>❄️ НЕ АНАРХИЯ. ЖЕСТКИЕ ПРАВИЛА. ХОЛОДНАЯ ВОЙНА. КТО ВЫЖИВЕТ — ТОТ СТАНЕТ ЛЕГЕНДОЙ. ❄️</p>
+        <div class="badge">⚡ Рейтинг · Кланы · Глобальные PvP ивенты · Гайды на выживание ⚡</div>
+    </div>
+
+    <div class="donate-section">
+        <div class="section-title">💎 ПРИВИЛЕГИИ ВОИНА 💎</div>
+        <div class="section-sub">Прокачай свой стиль боя и доминируй в тундре</div>
+
+        <div class="cards">
+            <!-- VIP 150 руб -->
+            <div class="donate-card vip-style">
+                <div class="card-title">VIP</div>
+                <div class="price"><span class="rub-symbol">₽</span>150 <span>/ навсегда</span></div>
+                <div class="divider"></div>
+                <ul class="perks">
+                    <li>Префикс [❄️VIP❄️] в чате</li>
+                    <li>Цвет ника в табе (#FFAA33)</li>
+                    <li>+/sethome (3 дома)</li>
+                    <li>Ранний вход / приоритет</li>
+                    <li>Ежедневная награда: 300 монет</li>
+                    <li>Доступ к /back после смерти в PvP</li>
+                </ul>
+                <a class="btn-donate" onclick="openDonate('VIP', 150)">🎁 КУПИТЬ VIP · 150 ₽ 🎁</a>
+            </div>
+
+            <!-- ТИТАН 350 руб -->
+            <div class="donate-card titan-style">
+                <div class="card-title">ТИТАН</div>
+                <div class="price"><span class="rub-symbol">₽</span>350 <span>/ навсегда</span></div>
+                <div class="divider"></div>
+                <ul class="perks">
+                    <li>Префикс [⛓️ТИТАН⛓️] в чате</li>
+                    <li>Цвет ника в табе (#55FFFF)</li>
+                    <li>+/sethome (6 домов)</li>
+                    <li>Ранний вход + кик слотов защиты</li>
+                    <li>Ежедневная награда: 750 монет</li>
+                    <li>Эффект "Скорость I" на спавне</li>
+                    <li>Кастомная частица шагов (лёд)</li>
+                </ul>
+                <a class="btn-donate" onclick="openDonate('ТИТАНА', 350)">🗡️ СТАТЬ ТИТАНОМ · 350 ₽ 🗡️</a>
+            </div>
+
+            <!-- ПРИНЦ 600 руб -->
+            <div class="donate-card prince-style">
+                <div class="card-title">ПРИНЦ</div>
+                <div class="price"><span class="rub-symbol">₽</span>600 <span>/ навсегда</span></div>
+                <div class="divider"></div>
+                <ul class="perks">
+                    <li>Префикс [👑ПРИНЦ👑] в чате</li>
+                    <li>Цвет ника в табе (#FF55FF)</li>
+                    <li>+/sethome (10 домов)</li>
+                    <li>Приоритетный вход + защита от кика</li>
+                    <li>Ежедневная награда: 1500 монет</li>
+                    <li>Эффекты: Speed I + Jump Boost I</li>
+                    <li>Эксклюзивный плащ (элитра-скин)</li>
+                    <li>Своя эмодзи в чат 🐺</li>
+                </ul>
+                <a class="btn-donate" onclick="openDonate('ПРИНЦА', 600)">⚜️ ВЗЯТЬ КОРОНУ · 600 ₽ ⚜️</a>
+            </div>
+        </div>
+
+        <!-- Важное уведомление -->
+        <div style="background: #1f1418cc; border-radius: 20px; padding: 1rem; margin-top: 3rem; text-align: center; border-left: 3px solid #e63946;">
+            🧨 НЕТ /FLY, НЕТ КИТОВ С БРОНЁЙ. ТОЛЬКО ТВОЙ СКИЛЛ. ПОСЛЕ ОПЛАТЫ — АВТОВЫДАЧА ПРИВИЛЕГИИ.<br>
+            ✨ По вопросам: <strong>@tundra_pvp_support</strong> в Telegram. Анархии нет — душнилов банят.
+        </div>
+    </div>
+
+    <div class="footer">
+        Tundra SMP · ip: TundraSMP.goida.hhost · версия 1.21.11 <br>
+        ❄️ «Убей или умри. Но помни — здесь честный бой» ❄️
+    </div>
+</div>
+
+<!-- Модальное окно оплаты -->
+<div id="paymentModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); z-index: 999; align-items: center; justify-content: center;">
+    <div style="background: #0f1725; border-radius: 32px; padding: 2rem; max-width: 400px; width: 90%; border: 1px solid #e63946; text-align: center;">
+        <h3 style="font-size: 1.7rem; margin-bottom: 0.5rem;" id="modalTitle">💸 Оформление</h3>
+        <p style="margin-bottom: 1rem;">Сумма: <strong id="modalPrice" style="font-size: 1.5rem;">150 ₽</strong></p>
+        <div style="background:#111c28; border-radius: 20px; padding: 1rem; margin: 1rem 0;">
+            🧊 Введи свой ник в Minecraft (Bedrock/Java):<br>
+            <input type="text" id="minecraftNick" placeholder="TundraWarrior" style="margin-top: 10px; padding: 10px; width: 100%; background: #0a0f18; border: 1px solid #e63946; border-radius: 60px; color: white; text-align: center;">
+        </div>
+        <button id="fakePayBtn" style="background: linear-gradient(95deg, #a53f2c, #641e10); border: none; padding: 14px 24px; border-radius: 60px; font-weight: bold; color: white; width: 100%; cursor: pointer; font-size: 1rem;">✅ Перейти к оплате</button>
+        <button id="closeModalBtn" style="background: none; border: 1px solid #e63946; margin-top: 15px; padding: 8px; border-radius: 40px; width: 100%; color: #ffb69e; cursor: pointer;">Закрыть</button>
+        <p style="font-size: 0.7rem; margin-top: 15px;">* Демо-режим. После оплаты привилегия выдастся автоматически.</p>
+    </div>
+</div>
+
+<script>
+    let currentRank = "";
+    let currentPrice = 0;
+
+    function openDonate(rank, price) {
+        currentRank = rank;
+        currentPrice = price;
+        document.getElementById('modalTitle').innerHTML = `💎 ${rank} на Tundra SMP`;
+        document.getElementById('modalPrice').innerHTML = `${price} ₽`;
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    const modal = document.getElementById('paymentModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const fakePay = document.getElementById('fakePayBtn');
+    const nickInput = document.getElementById('minecraftNick');
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    fakePay.addEventListener('click', () => {
+        let nickname = nickInput.value.trim();
+        if (nickname === "") {
+            nickname = "воин";
+        }
+        alert(`❄️⚔️ Спасибо, ${nickname}! Ты купил ранг ${currentRank} за ${currentPrice} ₽. Привилегия на сервере Tundra SMP активируется через 30 секунд. Убей всех! ⚔️❄️`);
+        modal.style.display = 'none';
+        nickInput.value = '';
+    });
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
